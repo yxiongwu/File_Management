@@ -44,5 +44,12 @@ module.exports = {
   devServer: {
     host: "127.0.0.1",
     port: 9000,
+    proxy: {
+      "/file": {
+        target: "http://localhost:3000",
+        secure: false,
+        changeOrigin: true,
+      },
+    },
   },
 };
