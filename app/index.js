@@ -28,6 +28,7 @@ function getFileInfo(filePath) {
           size: formatFileSize(stats.size),
           type,
           isDirectory: stats.isDirectory(),
+          absolutePath: stats.isDirectory() ? path.resolve(filePath) : null,
           mtime: stats.mtime.getTime(),
         });
       }

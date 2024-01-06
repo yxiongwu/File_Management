@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import { Table, Input } from "antd";
-import { FolderAddOutlined, FileOutlined } from "@ant-design/icons";
+import {
+  FolderAddOutlined,
+  FileOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import http from "./request";
 import dayjs from "dayjs";
 
-const Search = Input.Search;
-
 const App = () => {
-  const onSearch = (value) => {
-    http.get(`/file/fileList?path=${value}`).then((res) => {
+  const [searchPath, setSearchPath] = useState("");
+
+  const onSearch = (value?: string) => {
+    http.get(`/file/fileList?path=${value || ""}`).then((res) => {
       setTableData(res.data);
     });
+  };
+
+  // 文件夹直接搜索
+  const folderSearch = (record) => {
+    const { absolutePath } = record;
+    onSearch(absolutePath);
+    setSearchPath(absolutePath);
   };
 
   const columns = [
@@ -18,9 +29,10 @@ const App = () => {
       title: "是否是文件夹",
       dataIndex: "isDirectory",
       key: "isDirectory",
-      render: (value) =>
+      render: (value, record) =>
         value ? (
           <FolderAddOutlined
+            onClick={() => folderSearch(record)}
             style={{ fontSize: 25, color: "rgb(5, 144, 223)" }}
           />
         ) : (
@@ -54,9 +66,15 @@ const App = () => {
 
   return (
     <div>
-      <Search
-        placeholder="搜索文件路径,例如:"
-        onSearch={onSearch}
+      <Input
+        placeholder="按Enter可搜索文件路径,例如:"
+        onChange={(e) => {
+          setSearchPath(e.target.value);
+        }}
+        value={searchPath}
+        onKeyDown={(e) => {
+          e.key === "Enter" && onSearch(searchPath);
+        }}
         style={{ marginBottom: "20px" }}
       />
       <Table columns={columns} key="id" dataSource={tableData} />

@@ -15,13 +15,15 @@ app.get("/file/fileList", async (req, res) => {
       code: 0,
       data: status,
       success: true,
-      message: "操作成功",
+      msg: "操作成功",
     });
   } catch (error) {
+    res.status = 400;
     res.send({
-      code: 500,
+      code: 400,
       success: false,
-      message: error,
+      data: error,
+      msg: "无效路径",
     });
   }
 });
