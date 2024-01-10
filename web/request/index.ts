@@ -30,6 +30,8 @@ http.interceptors.response.use(
     }
   },
   (error) => {
+    const { msg } = error.response.data;
+    message.error(msg);
     // 处理响应错误
     return Promise.reject(error);
   }
