@@ -44,6 +44,9 @@ module.exports = {
   devServer: {
     host: "127.0.0.1",
     port: 9000,
+    client: {
+      overlay: false,
+    },
     proxy: {
       "/file": {
         target: "http://localhost:3000",
