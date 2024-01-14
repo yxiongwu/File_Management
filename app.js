@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
 app.get("/file/fileList", async (req, res, next) => {
   try {
     const path = req.query.path;
-    const status = await searchFileData(path || __dirname);
+    const status = await searchFileData(path);
     res.send({
       code: 0,
       data: status,
